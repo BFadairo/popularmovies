@@ -9,4 +9,6 @@
     <!-- Dimensions for Text Sizes -->
     <dimen name="detail_text_size_small">15sp</dimen>
     <dimen name="detail_text_size_big">30sp</dimen>
+    <dimen name="detail_layout_margin_small">10dp</dimen>
+    <dimen name="detail_layout_margin_med">16dp</dimen>
 </resources>
