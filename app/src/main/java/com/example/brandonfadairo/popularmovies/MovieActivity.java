@@ -161,7 +161,7 @@ public class MovieActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         //Get the MenuInflater and Inflate the Movie Menu
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.moviemenu, menu);
+        inflater.inflate(R.menu.movie_menu, menu);
         return true;
     }
 
