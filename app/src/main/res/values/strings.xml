@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">PopularMovies</string>
+
+    <!-- String for Movie Image -->
+    <string name="movie_image">Movie Image</string>
+
+    <!-- String for Movie Title -->
+    <string name="movie_title">Movie Title:</string>
+
+    <!-- String for movie title placeholder -->
+    <string name="movie_title_placeholder">Movie Here</string>
+
+    <!-- String for movie release date -->
+    <string name="release_date">Release Date:</string>
+
+    <!-- String for movie release date placeholder -->
+    <string name="release_date_placeholder">Movie Release Date</string>
+
+    <!-- String for Voter Average -->
+    <string name="voter_average">Voter Average:</string>
+
+    <!-- String for plot synopsis -->
+    <string name="plot_synopsis">Overview:</string>
+
+    <!-- String for voter average placeholder -->
+    <string name="voter_average_placeholder">Average</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings Related to settings -->
+    <string name="image_size_title">Image Size</string>
+    <string name="pref_sort_key">Movie Sort</string>
+    <string name="pref_sort_title">Sort Type</string>
+
+    <!-- Strings related to default settings -->
+    <string name="pref_sort_popular">Most Popular</string>
+    <string name="pref_sort_top_rated">Top Rated</string>
+    <string name="pref_size_key">Image Size</string>
+    <string name="pref_size_92">w92</string>
+    <string name="pref_size_145">w145</string>
+    <string name="pref_size_154">w154</string>
+    <string name="pref_size_185">w185</string>
+    <string name="pref_size_342">w342</string>
+    <string name="pref_size_500">w500</string>
+    <string name="pref_size_780">w780</string>
+    <string name="movie_settings">Movie Settings</string>
+    <string name="movie_search">S</string>
+
+    <!-- Strings related to errors -->
+    <string name="no_connection">No Connection</string>
+    <string name="no_movies_found">No Movies Found</string>
+    <string name="searching_movies">Searching For Movies...</string>
+
+    <!-- Strings related to movie fields -->
+    <string name="title">Title</string>
+    <string name="poster">Poster</string>
+    <string name="backdrop">Backdrop</string>
+    <string name="date">Date</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="average">Average</string>
+</resources>

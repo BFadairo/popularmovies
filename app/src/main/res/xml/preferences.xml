@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceCategory android:title="@string/movie_settings">
+    <ListPreference
+        android:defaultValue="@string/pref_size_342"
+        android:entries="@array/Pref_image_size"
+        android:entryValues="@array/pref_image_values"
+        android:key="@string/pref_size_key"
+        android:title="@string/image_size_title">
+    </ListPreference>
+
+    <ListPreference
+        android:defaultValue="@string/pref_sort_popular"
+        android:entries="@array/pref_movie_sort"
+        android:entryValues="@array/pref_movie_values"
+        android:key="@string/pref_sort_key"
+        android:title="@string/pref_sort_title">
+    </ListPreference>
+</PreferenceCategory>
+</PreferenceScreen>
