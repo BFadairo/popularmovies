@@ -2,6 +2,7 @@ package com.example.brandonfadairo.popularmovies;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
@@ -64,6 +65,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             if (!(preference instanceof CheckBoxPreference)){
                 setPreferenceSummary(preference, sharedPreferences.getString(key, ""));
             }
+            //For Testing Purposes
             if (preference instanceof ListPreference){
                 Log.v(LOG_TAG, "List Entry: " + ((ListPreference) preference).getEntry());
             }

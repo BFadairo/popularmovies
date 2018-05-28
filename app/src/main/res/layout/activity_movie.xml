@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".MovieActivity"
-        android:background="@android:color/black">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:orientation="vertical"
+    tools:context=".MovieActivity">
 
 
     <GridView
         android:id="@+id/grid_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:numColumns="2"
-        android:horizontalSpacing="0dp"
-        android:verticalSpacing="0dp"
-        android:scrollbars="vertical"
-        android:focusableInTouchMode="false"
         android:focusable="false"
-        />
+        android:focusableInTouchMode="false"
+        android:horizontalSpacing="0dp"
+        android:numColumns="2"
+        android:scrollbars="vertical"
+        android:verticalSpacing="0dp" />
 
     <!-- Empty view is only visible when the list has no items. -->
     <TextView
@@ -27,14 +25,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="@android:color/white"
-        android:textAppearance="?android:textAppearanceMedium"/>
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/white" />
 
     <ProgressBar
         android:id="@+id/bar_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:indeterminateTint="@color/colorAccent"
-        />
+        android:indeterminateTint="@color/colorAccent" />
 
-    </RelativeLayout>
+</RelativeLayout>

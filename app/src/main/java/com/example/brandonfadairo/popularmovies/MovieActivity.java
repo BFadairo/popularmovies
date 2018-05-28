@@ -41,18 +41,15 @@ public class MovieActivity extends AppCompatActivity
 
     private ProgressBar loadingView;
 
-    private static final String GRID_STATE = "gridState";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
-        //Find the GridView list ID TODO
+        //Find the GridView list ID
         movieGridView = findViewById(R.id.grid_view);
 
-        //Find the Empty TextView ID
+        //Find the Empty TextView ID and set it to the EmptyView
         emptyView = findViewById(R.id.empty_view);
         movieGridView.setEmptyView(emptyView);
 
@@ -99,9 +96,11 @@ public class MovieActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 //Get the current Movie so we can extract fields from it
                 Movie currentMovie = (Movie) adapterView.getItemAtPosition(position);
+
                 //Display a Toast that shows the current movie title. FOR TESTING PURPOSES
-                Toast movieToast = Toast.makeText(getApplicationContext(), "Movie: " + currentMovie.getTitle(), Toast.LENGTH_LONG);
+                /*Toast movieToast = Toast.makeText(getApplicationContext(), "Movie: " + currentMovie.getTitle(), Toast.LENGTH_LONG);
                 movieToast.show();
+                */
 
                 //Create a new Intent to open the DetailActivity
                 //Put the String extras from the movie fields into the Intents

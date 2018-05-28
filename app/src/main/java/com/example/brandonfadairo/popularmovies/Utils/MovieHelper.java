@@ -3,7 +3,9 @@ package com.example.brandonfadairo.popularmovies.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.brandonfadairo.popularmovies.R;
 
@@ -22,35 +24,36 @@ public class MovieHelper {
 
     private static final String API_TAG = "api_key";
 
-    private static final String API_KEY = "67df4653be6cce83a6265a3c94b33b72";
+    private static final String API_KEY = ""; // Insert MovieDB API key here
 
     private static String sortOrder = "Most Popular";
 
 
     /**
      * Helper Method used to determine user sort preference
+     *
      * @param context of the activity
      * @return isPopular
      */
-    private static String isPopular (Context context){
+    private static String isPopular(Context context) {
         //Get the SharedPreferences
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
+
         String keyForSort = context.getString(R.string.pref_sort_key);
         String defaultSort = context.getString(R.string.pref_sort_popular);
-        String preferredSort = prefs.getString(keyForSort,defaultSort);
-        String popular = context.getString(R.string.pref_sort_popular);
-        //Log.v(LOG_TAG, "Sort: " + preferredSort);
-        String prefSort = "";
+        String preferredSort = prefs.getString(keyForSort, defaultSort);
+        Log.v(LOG_TAG, "Sort: " + preferredSort);
+        String prefSort = POPULAR_SEARCH;
 
-        switch (preferredSort){
+        switch (preferredSort) {
             case "0":
                 prefSort = POPULAR_SEARCH;
-                MovieHelper.sortOrder = "Most Popular";
+                sortOrder = "Most Popular";
                 break;
             case "1":
                 prefSort = TOP_RATED;
-                MovieHelper.sortOrder = "Top Rated";
+                sortOrder = "Top Rated";
                 break;
         }
 
@@ -59,20 +62,21 @@ public class MovieHelper {
 
     /**
      * Used to determine the imageSize the user has set
+     *
      * @param context of the activity
      * @return the preferredSize for images
      */
 
-    private static String imageSizeSet (Context context){
+    private static String imageSizeSet(Context context) {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
         String keyForSize = context.getString(R.string.pref_size_key);
         String defaultSize = context.getString(R.string.pref_size_154);
         String preferredSize = prefs.getString(keyForSize, defaultSize);
-        String size = "";
+        String size = context.getString(R.string.pref_size_500);
         //Log.v(LOG_TAG, "Size Sort: " + preferredSize);
 
-        switch (preferredSize){
+        switch (preferredSize) {
             case "0":
                 size = context.getString(R.string.pref_size_92);
                 break;
@@ -97,11 +101,12 @@ public class MovieHelper {
 
     /**
      * Used to combine the posterPath with the query path (BASE_IMAGE_URL)
+     *
      * @param imagePath of the movie poster
-     * @param context of the activity
+     * @param context   of the activity
      * @return imageLink, the complete image path
      */
-    public static String buildImage (String imagePath, Context context) {
+    public static String buildImage(String imagePath, Context context) {
         //Create a new Uri called request and parse the BASE_IMAGE_URL
         Uri request = Uri.parse(BASE_IMAGE_URL);
         //Create a string variable to store the Uri
@@ -120,10 +125,11 @@ public class MovieHelper {
 
     /**
      * This method is used to build the queryUrl for MovieDB
+     *
      * @param context of the activity
      * @return the completed link
      */
-    public static String buildQueryUrl(Context context){
+    public static String buildQueryUrl(Context context) {
         //Create a new Uri called request and parse the BASE_IMAGE_URL
         Uri request = Uri.parse(BASE_REQUEST_URL);
         //Create a string variable called link to store the built Uri
@@ -141,8 +147,10 @@ public class MovieHelper {
         return link;
     }
 
-    /** Return the sortOrder to be used in the Detail and Movie Activities */
-    public static String getSortOrder(){
+    /**
+     * Return the sortOrder to be used in the Detail and Movie Activities
+     */
+    public static String getSortOrder() {
         return sortOrder;
     }
 }

@@ -31,7 +31,6 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_detail);
-        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Find the views associated with the detail activity
         movieBackdrop = findViewById(R.id.movie_poster_bin);
@@ -88,17 +87,6 @@ public class DetailActivity extends AppCompatActivity {
             Log.v(LOG_TAG, "Error Formatting Date");
         }
         return dt;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

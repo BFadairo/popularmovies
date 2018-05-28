@@ -1,6 +1,7 @@
 package com.example.brandonfadairo.popularmovies;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -13,11 +14,7 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            this.setContentView(R.layout.activity_settings);
-            //Set setDisplayHomeAsUpEnabled to true on the support ActionBar
-            this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
+            setContentView(R.layout.activity_settings);
         }
 
         @Override
