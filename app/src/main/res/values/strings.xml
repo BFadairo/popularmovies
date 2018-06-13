@@ -57,4 +57,5 @@
     <string name="date">Date</string>
     <string name="synopsis">Synopsis</string>
     <string name="average">Average</string>
+    <string name="movie_extra">Movie Extra</string>
 </resources>

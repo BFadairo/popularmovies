@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.brandonfadairo.popularmovies.model.Movie;
+import com.example.brandonfadairo.popularmovies.model.Review;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -30,7 +31,7 @@ public class NetworkUtils {
     /**
      * Query the MovieDB dataset and return as (@link Event) object to represent multiple movies.
      */
-    public static List<Movie> fetchJsonData(String requestURL) {
+    public static List<Movie> fetchMovieJsonData(String requestURL) {
         //Create URL object
         URL url = createUrl(requestURL);
 
@@ -46,7 +47,7 @@ public class NetworkUtils {
             e.printStackTrace();
         }
         //Extract the relevant fields from the JSON with helper method parseJson
-        List<Movie> movies = parseJson(jsonResponse);
+        List<Movie> movies = parseMovieJson(jsonResponse);
 
         //return the jsonResponse
         return movies;
@@ -85,7 +86,6 @@ public class NetworkUtils {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
-
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
@@ -119,7 +119,7 @@ public class NetworkUtils {
 
     }
 
-    public static List<Movie> parseJson(String json) {
+    public static List<Movie> parseMovieJson(String json) {
 
         if (TextUtils.isEmpty(json)) {
             return null;
@@ -152,9 +152,50 @@ public class NetworkUtils {
             }
 
         } catch (Exception e) {
-            Log.v(LOG_TAG, "Error Parsing JSON");
+            Log.v(LOG_TAG, "Error Parsing MovieJSON");
         }
 
         return movieStuff;
     }
+
+    public static List<Review> parseExtrasJson(String json){
+
+        if (TextUtils.isEmpty(json)){
+            return null;
+        }
+
+        Gson gson = new Gson();
+
+        List<Review> reviewStuff = new ArrayList<>();
+        // Try to parse the JSON response string. If there's a problem with the way the JSON
+        // is formatted, a JSONException exception object will be thrown.
+        // Catch the exception so the app doesn't crash, and print the error message to the logs.
+
+        try {
+
+            // Create a JSONObject from the JSON response string
+            JSONObject baseJsonResponse = new JSONObject(json);
+
+            // Extract the JSONArray associated with the key called "results",
+            // which represents a list of items (or movies).
+            JSONArray reviewArray = baseJsonResponse.getJSONArray("results");
+
+
+            for (int i = 0; i < reviewArray.length(); i++) {
+
+                JSONObject currentMovie = reviewArray.getJSONObject(i);
+                //Log.v(LOG_TAG, "Movie: " + currentMovie + movieArray.length());
+                Review reviews = gson.fromJson(currentMovie.toString(), Review.class);
+
+                reviewStuff.add(reviews);
+            }
+
+        } catch (Exception e){
+            Log.v(LOG_TAG, "Error Parsing Review Json");
+        }
+
+        return reviewStuff;
+    }
+
+
 }

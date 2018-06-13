@@ -1,5 +1,6 @@
 package com.example.brandonfadairo.popularmovies;
 
+import android.app.LoaderManager;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,12 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.brandonfadairo.popularmovies.Utils.MovieHelper;
+import com.example.brandonfadairo.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity{
 
     private final String LOG_TAG = DetailActivity.class.getName();
 
@@ -40,20 +42,20 @@ public class DetailActivity extends AppCompatActivity {
         movieSynopsis = findViewById(R.id.movie_synopsis_bin);
         moviePoster = findViewById(R.id.movie_poster_mini);
 
-        //Get the intent that started the activity
-        Intent startIntent = getIntent();
+        //Get the intent that started the activity and put it into a Movie object
+        Movie movie = getIntent().getParcelableExtra(getString(R.string.movie_extra));
 
-        //TODO: Create Strings for below values
         //Retrieve the extras that were put into the Intent
-        title = startIntent.getStringExtra(getString(R.string.title));
-        poster = startIntent.getStringExtra(getString(R.string.poster));
-        backdrop = startIntent.getStringExtra(getString(R.string.backdrop));
-        releaseDate = startIntent.getStringExtra(getString(R.string.date));
-        plotOverview = startIntent.getStringExtra(getString(R.string.synopsis));
-        average = startIntent.getStringExtra(getString(R.string.average));
+        title = movie.getTitle();
+        poster = movie.getPoster();
+        backdrop = movie.getBackdrop();
+        releaseDate = movie.getDate();
+        plotOverview = movie.getSynopsis();
+        average = movie.getAverage();
 
 
         Log.v(LOG_TAG, "Backdrop Path: " + MovieHelper.buildImage(backdrop, this));
+        //Load the Movie backdrop into the backdrop ImageView with Picasso
         Picasso.with(this)
                 .load(MovieHelper.buildImage(backdrop, this))
                 .error(R.drawable.ic_launcher_background)
@@ -61,6 +63,7 @@ public class DetailActivity extends AppCompatActivity {
                 .fit()
                 .into(movieBackdrop);
 
+        //Load the Mini Movie Poster into the Mini Movie POster ImageView with Picasso
         Picasso.with(this)
                 .load(MovieHelper.buildImage(poster, this))
                 .error(R.drawable.ic_launcher_background)
@@ -70,9 +73,11 @@ public class DetailActivity extends AppCompatActivity {
         movieTitle.setText(title);
         //Set the Title of the Detail activity to the Selected Movie
         this.setTitle(title);
-        //Set the
+        //Set the Text of the DateView to the formatted Date
         movieDate.setText(formatDate());
+        //Set the text of the Synopsis View to the movie synopsis
         movieSynopsis.setText(plotOverview);
+        //Set the text of the Average view to the movie average
         movieAverage.setText(average);
     }
 

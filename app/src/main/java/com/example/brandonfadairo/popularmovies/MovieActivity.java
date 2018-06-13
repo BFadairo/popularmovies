@@ -10,15 +10,14 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.brandonfadairo.popularmovies.Utils.MovieHelper;
 import com.example.brandonfadairo.popularmovies.model.Movie;
@@ -27,7 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<List<Movie>>, SharedPreferences.OnSharedPreferenceChangeListener{
+        implements LoaderManager.LoaderCallbacks<List<Movie>>,
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        MovieAdapter.AdapterOnClick{
 
     private static String LOG_TAG = MovieActivity.class.getName();
 
@@ -35,23 +36,32 @@ public class MovieActivity extends AppCompatActivity
 
     private MovieAdapter movieAdapter;
 
-    private GridView movieGridView;
-
     private TextView emptyView;
 
     private ProgressBar loadingView;
+
+    private RecyclerView recyclerView;
+
+    private RecyclerView.LayoutManager layoutManager;
+
+    private ArrayList<Movie> mMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
-        //Find the GridView list ID
-        movieGridView = findViewById(R.id.grid_view);
+        //Find the RecyclerView list ID
+        recyclerView = findViewById(R.id.recycler_view_main);
+
+        //Create a GridLayoutManager
+        int numberOfColumns = 2;
+        layoutManager = new GridLayoutManager(this, numberOfColumns);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.hasFixedSize();
 
         //Find the Empty TextView ID and set it to the EmptyView
         emptyView = findViewById(R.id.empty_view);
-        movieGridView.setEmptyView(emptyView);
 
         //Find the ProgressBar view ID
         loadingView = findViewById(R.id.bar_view);
@@ -65,8 +75,9 @@ public class MovieActivity extends AppCompatActivity
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
 
-        // Create a new adapter that takes an empty list of books as input
-        movieAdapter = new MovieAdapter(this, new ArrayList<Movie>());
+        mMovies = new ArrayList<>();
+        // Create a new adapter that takes an empty list of movies as input
+        movieAdapter = new MovieAdapter(this, mMovies, this);
 
         if (isConnected) {
             //Get the LoaderManager
@@ -85,37 +96,10 @@ public class MovieActivity extends AppCompatActivity
 
         // Set the Adapter on the (@link GridView)
         // so the list can be populated in the user interface
-        movieGridView.setAdapter(movieAdapter);
+        recyclerView.setAdapter(movieAdapter);
         //Enable the vertical scrollbar on the view
-        movieGridView.setVerticalScrollBarEnabled(true);
+        recyclerView.setVerticalScrollBarEnabled(true);
 
-        //Create a new OnItemClickListener so that we may open the DetailActivity
-        //And feed in data from the MovieActivity
-        movieGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                //Get the current Movie so we can extract fields from it
-                Movie currentMovie = (Movie) adapterView.getItemAtPosition(position);
-
-                //Display a Toast that shows the current movie title. FOR TESTING PURPOSES
-                /*Toast movieToast = Toast.makeText(getApplicationContext(), "Movie: " + currentMovie.getTitle(), Toast.LENGTH_LONG);
-                movieToast.show();
-                */
-
-                //Create a new Intent to open the DetailActivity
-                //Put the String extras from the movie fields into the Intents
-                Intent detailOpen = new Intent(MovieActivity.this, DetailActivity.class);
-                detailOpen.putExtra(getString(R.string.title), currentMovie.getTitle());
-                detailOpen.putExtra(getString(R.string.date), currentMovie.getDate());
-                detailOpen.putExtra(getString(R.string.poster), currentMovie.getPoster());
-                detailOpen.putExtra(getString(R.string.average), currentMovie.getAverage());
-                detailOpen.putExtra(getString(R.string.backdrop), currentMovie.getBackdrop());
-                detailOpen.putExtra(getString(R.string.synopsis), currentMovie.getSynopsis());
-                detailOpen.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                //Start the detail activity
-                startActivity(detailOpen);
-            }
-        });
         //Set the title on the MovieActivity to the initial sort order
         this.setTitle(MovieHelper.getSortOrder());
 
@@ -135,8 +119,8 @@ public class MovieActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<List<Movie>> loader, List<Movie> movies) {
-        //Clear the adapter of previous Movie data
-        movieAdapter.clear();
+        //Clear the current Data in the DataSet
+        mMovies.clear();
         // Set empty state text to display "No Movie found."
         emptyView.setText(R.string.no_movies_found);
         // Sets the loading bar to gone when loading is finished
@@ -145,15 +129,17 @@ public class MovieActivity extends AppCompatActivity
         // If there is a valid list of {@link Movies}, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (movies != null && !movies.isEmpty()) {
-            movieAdapter.addAll(movies);
+          mMovies.addAll(movies);
+          //Set the EmptyView Visibility to Gone once Loaded and data is not null
+          emptyView.setVisibility(View.GONE);
         }
-
+        movieAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<List<Movie>> loader) {
-        //Clear the adapter of previous data
-        movieAdapter.clear();
+        //Clear the Adapter of previous Data
+        mMovies.clear();
     }
 
     @Override
@@ -183,6 +169,9 @@ public class MovieActivity extends AppCompatActivity
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        //Clear The previous Data
+        mMovies.clear();
+
         // Get the loader manager
         LoaderManager loaderManager = getLoaderManager();
         //Restart the loader when SharedPreferences are changed
@@ -191,6 +180,8 @@ public class MovieActivity extends AppCompatActivity
         //Set the progress bar to visible
         loadingView.setVisibility(View.VISIBLE);
 
+        //Set the emptyView TextView to visible
+        emptyView.setVisibility(View.VISIBLE);
         //Set the emptyView text to searching
         emptyView.setText(R.string.searching_movies);
 
@@ -198,10 +189,10 @@ public class MovieActivity extends AppCompatActivity
         this.setTitle(MovieHelper.getSortOrder());
 
         //Create a new adapter
-        movieAdapter = new MovieAdapter(this, new ArrayList<Movie>());
+        movieAdapter = new MovieAdapter(this, mMovies, this);
 
         //Set the new adapter
-        movieGridView.setAdapter(movieAdapter);
+        recyclerView.setAdapter(movieAdapter);
     }
 
     @Override
@@ -210,5 +201,16 @@ public class MovieActivity extends AppCompatActivity
         //Unregister the OnSharedPreferenceChangeListener
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    //The On Click Listener for the Recycler View
+    //When a MoviePoster is selected
+    //Open the DetailActivity
+    //And put that Movie object into an Intent
+    @Override
+    public void onClick(Movie movie) {
+        Intent detailActivity = new Intent(this, DetailActivity.class);
+        detailActivity.putExtra(getString(R.string.movie_extra), movie);
+        startActivity(detailActivity);
     }
 }

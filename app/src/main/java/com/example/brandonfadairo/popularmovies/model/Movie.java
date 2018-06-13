@@ -1,9 +1,11 @@
 package com.example.brandonfadairo.popularmovies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-@SuppressWarnings("unused")
-public class Movie {
+public class Movie implements Parcelable {
 
     //int used to store the id of the movie
     @SerializedName("id")
@@ -38,17 +40,25 @@ public class Movie {
      * Constructor
      **/
 
-    public Movie(){
+    protected Movie(Parcel in) {
+        this.mId = in.readInt();
+        this.mTitle = in.readString();
+        this.mDate = in.readString();
+        this.mPoster = in.readString();
+        this.mBackdrop = in.readString();
+        this.mAverage = in.readString();
+        this.mSynopsis = in.readString();
     }
 
-    public Movie(int id, String title, String date, String poster, String backdrop, String average, String synopsis) {
-        mId = id;
-        mTitle = title;
-        mDate = date;
-        mPoster = poster;
-        mBackdrop = backdrop;
-        mAverage = average;
-        mSynopsis = synopsis;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.mId);
+        dest.writeString(this.mTitle);
+        dest.writeString(this.mDate);
+        dest.writeString(this.mPoster);
+        dest.writeString(this.mBackdrop);
+        dest.writeString(this.mAverage);
+        dest.writeString(this.mSynopsis);
     }
 
     /**
@@ -100,4 +110,22 @@ public class Movie {
     public String getSynopsis() {
         return mSynopsis;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

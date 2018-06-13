@@ -8,6 +8,7 @@ import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.example.brandonfadairo.popularmovies.R;
+import com.example.brandonfadairo.popularmovies.model.Movie;
 
 
 public class MovieHelper {
@@ -16,7 +17,11 @@ public class MovieHelper {
 
     private static final String BASE_REQUEST_URL = "http://api.themoviedb.org/3/movie/";
 
-    private static String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
+    private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
+
+    private static final String TRAILER_TAG = "videos";
+
+    private static final String REVIEW_TAG = "reviews";
 
     private static final String POPULAR_SEARCH = "popular";
 
@@ -24,9 +29,12 @@ public class MovieHelper {
 
     private static final String API_TAG = "api_key";
 
-    private static final String API_KEY = ""; // Insert MovieDB API key here
+    private static final String API_KEY = "67df4653be6cce83a6265a3c94b33b72"; // Insert MovieDB API key here
 
     private static String sortOrder = "Most Popular";
+
+    private static final String APPEND_KEY = "append_to_response";
+
 
 
     /**
@@ -143,6 +151,74 @@ public class MovieHelper {
                 .toString();
 
         //Log.d(LOG_TAG, "Link: " + link);
+
+        return link;
+    }
+
+    /**
+     * Method used to search for related trailers for movie
+     * @param movie We want to find the trailers for
+     * @return link the completed request link
+     */
+     public static String buildTrailerRequest(Movie movie){
+        //Create a new Uri from the BASE_REQUEST_URL
+         Uri request = Uri.parse(BASE_REQUEST_URL);
+         //Create a string variable called link to store the built Uri
+         String link = request.buildUpon()
+                 //Append the MovieId to the movie Uri
+                 .appendPath(String.valueOf(movie.getId()))
+                 //Append the Trailer Tag to the Uri
+                 .appendPath(TRAILER_TAG)
+                 //Finally append the API TAG and API Key
+                 .appendQueryParameter(API_TAG, API_KEY)
+                 .build()
+                 .toString();
+
+         return link;
+     }
+
+    /**
+     * Method used to create link we will use to search for movie reviews
+     * @param movie the movie that we are searching reviews for
+     * @return link The completed request link
+     */
+     public static String buildReviewRequest(Movie movie){
+         //Create a new Uri from the BASE_REQUEST_URL
+         Uri request = Uri.parse(BASE_REQUEST_URL);
+         //Create a string variable called link to store the built Uri
+         String link = request.buildUpon()
+                 //Append the MovieId to the movie Uri
+                 .appendPath(String.valueOf(movie.getId()))
+                 //Append the Review Tag to the Uri
+                 .appendPath(REVIEW_TAG)
+                 //Finally append the API TAG and API Key
+                 .appendQueryParameter(API_TAG, API_KEY)
+                 .build()
+                 .toString();
+
+         return link;
+     }
+
+    /**
+     * Method used to request the trailers and reviews for a certain movie
+     * @param movie the movie whose Id will be extracted for query
+     * @return link the new request link
+     */
+    public static String buildExtraRequest (Movie movie){
+        //Create a new Uri from the BASE_REQUEST_URL
+        Uri request = Uri.parse(BASE_REQUEST_URL);
+        //Create a string variable called link to store the built Uri
+        String link = request.buildUpon()
+                //Append the MovieId to the movie Uri
+                .appendPath(String.valueOf(movie.getId()))
+                //Append the Review Tag to the Uri
+                .appendPath(REVIEW_TAG)
+                //Finally append the API TAG and API Key
+                .appendQueryParameter(API_TAG, API_KEY)
+                .appendPath(APPEND_KEY)
+                .appendEncodedPath(TRAILER_TAG + "," + REVIEW_TAG)
+                .build()
+                .toString();
 
         return link;
     }
