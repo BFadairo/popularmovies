@@ -3,7 +3,6 @@ package com.example.brandonfadairo.popularmovies.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
@@ -211,15 +210,13 @@ public class MovieHelper {
         String link = request.buildUpon()
                 //Append the MovieId to the movie Uri
                 .appendPath(String.valueOf(movie.getId()))
-                //Append the Review Tag to the Uri
-                .appendPath(REVIEW_TAG)
                 //Finally append the API TAG and API Key
                 .appendQueryParameter(API_TAG, API_KEY)
-                .appendPath(APPEND_KEY)
-                .appendEncodedPath(TRAILER_TAG + "," + REVIEW_TAG)
+                .appendQueryParameter(APPEND_KEY, TRAILER_TAG + "," + REVIEW_TAG)
                 .build()
                 .toString();
 
+        Log.v(LOG_TAG, "Review Link: " + link);
         return link;
     }
 

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.brandonfadairo.popularmovies.model.Movie;
 import com.example.brandonfadairo.popularmovies.model.Review;
+import com.example.brandonfadairo.popularmovies.model.Trailer;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -29,7 +30,7 @@ public class NetworkUtils {
     private static String LOG_TAG = NetworkUtils.class.getName();
 
     /**
-     * Query the MovieDB dataset and return as (@link Event) object to represent multiple movies.
+     * Query the MovieDB dataset and return as (@link Movie) object to represent multiple movies.
      */
     public static List<Movie> fetchMovieJsonData(String requestURL) {
         //Create URL object
@@ -51,6 +52,31 @@ public class NetworkUtils {
 
         //return the jsonResponse
         return movies;
+    }
+
+    /**
+     * Query the MovieDB dataset and return as (@link Movie) object to represent multiple movies.
+     */
+    public static List<Review> fetchReviewJsonData(String requestURL) {
+        //Create URL object
+        URL url = createUrl(requestURL);
+
+        // Perform HTTP request to the URL and receive a JSON response back
+        String jsonResponse = null;
+        try {
+            Thread.sleep(2000);
+            jsonResponse = makeHttpRequest(url);
+            Log.v(LOG_TAG, "Json Response: " + jsonResponse);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error closing input stream", e);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //Extract the relevant fields from the JSON with helper method parseJson
+        List<Review> reviews = parseExtrasJson(jsonResponse);
+
+        //return the jsonResponse
+        return reviews;
     }
 
     private static URL createUrl(String requestURL) {
@@ -167,6 +193,7 @@ public class NetworkUtils {
         Gson gson = new Gson();
 
         List<Review> reviewStuff = new ArrayList<>();
+        List<Trailer> trailerStuff = new ArrayList<>();
         // Try to parse the JSON response string. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
@@ -177,15 +204,17 @@ public class NetworkUtils {
             JSONObject baseJsonResponse = new JSONObject(json);
 
             // Extract the JSONArray associated with the key called "results",
-            // which represents a list of items (or movies).
-            JSONArray reviewArray = baseJsonResponse.getJSONArray("results");
+            // which represents a list of items (or reviews).
+            JSONObject baseReviewArray = baseJsonResponse.getJSONObject("reviews");
+
+            JSONArray reviewArray = baseReviewArray.getJSONArray("results");
 
 
             for (int i = 0; i < reviewArray.length(); i++) {
 
-                JSONObject currentMovie = reviewArray.getJSONObject(i);
-                //Log.v(LOG_TAG, "Movie: " + currentMovie + movieArray.length());
-                Review reviews = gson.fromJson(currentMovie.toString(), Review.class);
+                JSONObject currentReview = reviewArray.getJSONObject(i);
+                Log.v(LOG_TAG, "Review: " + currentReview + reviewArray.length());
+                Review reviews = gson.fromJson(currentReview.toString(), Review.class);
 
                 reviewStuff.add(reviews);
             }

@@ -1,4 +1,4 @@
-package com.example.brandonfadairo.popularmovies;
+package com.example.brandonfadairo.popularmovies.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.example.brandonfadairo.popularmovies.R;
 import com.example.brandonfadairo.popularmovies.Utils.MovieHelper;
 import com.example.brandonfadairo.popularmovies.model.Movie;
 import com.squareup.picasso.Picasso;

@@ -7,9 +7,9 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.brandonfadairo.popularmovies.Adapters.MovieAdapter;
 import com.example.brandonfadairo.popularmovies.Utils.MovieHelper;
 import com.example.brandonfadairo.popularmovies.model.Movie;
 
