@@ -12,6 +12,10 @@ public class Review {
     @SerializedName("content")
     private String mReview;
 
+    public Review() {
+
+    }
+
     public Review (String author, String review){
         this.author = author;
         this.mReview = review;

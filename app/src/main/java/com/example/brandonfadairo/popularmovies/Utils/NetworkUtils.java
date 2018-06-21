@@ -3,9 +3,10 @@ package com.example.brandonfadairo.popularmovies.Utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.brandonfadairo.popularmovies.model.Extras;
 import com.example.brandonfadairo.popularmovies.model.Movie;
 import com.example.brandonfadairo.popularmovies.model.Review;
-import com.example.brandonfadairo.popularmovies.model.Trailer;
+import com.example.brandonfadairo.popularmovies.model.Videos;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -28,6 +29,10 @@ public class NetworkUtils {
      * Tag for Log messages
      */
     private static String LOG_TAG = NetworkUtils.class.getName();
+
+    private static List<Review> reviewStuff;
+
+    private static List<Videos> videosStuff;
 
     /**
      * Query the MovieDB dataset and return as (@link Movie) object to represent multiple movies.
@@ -57,7 +62,7 @@ public class NetworkUtils {
     /**
      * Query the MovieDB dataset and return as (@link Movie) object to represent multiple movies.
      */
-    public static List<Review> fetchReviewJsonData(String requestURL) {
+    public static List<Extras> fetchExtrasJsonData(String requestURL) {
         //Create URL object
         URL url = createUrl(requestURL);
 
@@ -73,10 +78,10 @@ public class NetworkUtils {
             e.printStackTrace();
         }
         //Extract the relevant fields from the JSON with helper method parseJson
-        List<Review> reviews = parseExtrasJson(jsonResponse);
+        List<Extras> extras = parseExtrasJson(jsonResponse);
 
         //return the jsonResponse
-        return reviews;
+        return extras;
     }
 
     private static URL createUrl(String requestURL) {
@@ -184,7 +189,7 @@ public class NetworkUtils {
         return movieStuff;
     }
 
-    public static List<Review> parseExtrasJson(String json){
+    public static List<Extras> parseExtrasJson(String json) {
 
         if (TextUtils.isEmpty(json)){
             return null;
@@ -192,8 +197,12 @@ public class NetworkUtils {
 
         Gson gson = new Gson();
 
-        List<Review> reviewStuff = new ArrayList<>();
-        List<Trailer> trailerStuff = new ArrayList<>();
+        List<Extras> movieExtras = new ArrayList<>();
+        reviewStuff = new ArrayList<>();
+        videosStuff = new ArrayList<>();
+        Review reviews = new Review();
+        Videos videos = new Videos();
+        Extras extras = new Extras();
         // Try to parse the JSON response string. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
@@ -207,24 +216,34 @@ public class NetworkUtils {
             // which represents a list of items (or reviews).
             JSONObject baseReviewArray = baseJsonResponse.getJSONObject("reviews");
 
+            JSONObject baseVideoArray = baseJsonResponse.getJSONObject("videos");
+
             JSONArray reviewArray = baseReviewArray.getJSONArray("results");
 
+            JSONArray videoArray = baseVideoArray.getJSONArray("results");
 
-            for (int i = 0; i < reviewArray.length(); i++) {
-
-                JSONObject currentReview = reviewArray.getJSONObject(i);
-                Log.v(LOG_TAG, "Review: " + currentReview + reviewArray.length());
-                Review reviews = gson.fromJson(currentReview.toString(), Review.class);
-
+            for (int j = 0; j < reviewArray.length(); j++) {
+                JSONObject currentReview = reviewArray.getJSONObject(j);
+                //Log.v(LOG_TAG, "Review:" + currentReview);
+                reviews = gson.fromJson(currentReview.toString(), Review.class);
                 reviewStuff.add(reviews);
             }
+
+            for (int v = 0; v < videoArray.length(); v++) {
+                JSONObject currentVideo = videoArray.getJSONObject(v);
+                //Log.v(LOG_TAG, "Video:" + currentVideo);
+                videos = gson.fromJson(currentVideo.toString(), Videos.class);
+                videosStuff.add(videos);
+            }
+
+            extras = new Extras(reviewStuff, videosStuff);
+
+            movieExtras.add(extras);
 
         } catch (Exception e){
             Log.v(LOG_TAG, "Error Parsing Review Json");
         }
 
-        return reviewStuff;
+        return movieExtras;
     }
-
-
 }

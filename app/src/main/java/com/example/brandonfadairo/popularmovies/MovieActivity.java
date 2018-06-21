@@ -1,6 +1,7 @@
 package com.example.brandonfadairo.popularmovies;
 
 import android.app.LoaderManager;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -8,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.brandonfadairo.popularmovies.Adapters.MovieAdapter;
+import com.example.brandonfadairo.popularmovies.Database.MovieDatabase;
 import com.example.brandonfadairo.popularmovies.Utils.MovieHelper;
 import com.example.brandonfadairo.popularmovies.model.Movie;
 
@@ -47,13 +50,28 @@ public class MovieActivity extends AppCompatActivity
 
     private ArrayList<Movie> mMovies;
 
+    public static MovieDatabase database;
+
+    private final String DATABASE_NAME = "MovieDatabase.db";
+
+    private boolean isConnected;
+
+    private Parcelable saveState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
+        if (savedInstanceState != null) {
+            mMovies = savedInstanceState.getParcelableArrayList("Movie List");
+        }
+
         //Find the RecyclerView list ID
         recyclerView = findViewById(R.id.recycler_view_main);
+
+        //Create the database on Launch
+        database = Room.databaseBuilder(getApplicationContext(), MovieDatabase.class, DATABASE_NAME).build();
 
         //Create a GridLayoutManager
         int numberOfColumns = 2;
@@ -68,17 +86,11 @@ public class MovieActivity extends AppCompatActivity
         loadingView = findViewById(R.id.bar_view);
 
 
-
-        //Check the internet connection of the phone
-        ConnectivityManager cm =
-                (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-
         mMovies = new ArrayList<>();
         // Create a new adapter that takes an empty list of movies as input
         movieAdapter = new MovieAdapter(this, mMovies, this);
+
+        checkNetworkStatus();
 
         if (isConnected) {
             //Get the LoaderManager
@@ -115,6 +127,9 @@ public class MovieActivity extends AppCompatActivity
 
     @Override
     public Loader<List<Movie>> onCreateLoader(int i, Bundle bundle) {
+        if (saveState != null) {
+
+        }
         return new MovieLoader(this, MovieHelper.buildQueryUrl(this));
     }
 
@@ -213,5 +228,37 @@ public class MovieActivity extends AppCompatActivity
         Intent detailActivity = new Intent(this, DetailActivity.class);
         detailActivity.putExtra(getString(R.string.movie_extra), movie);
         startActivity(detailActivity);
+    }
+
+    public void checkNetworkStatus() {
+        //Check the internet connection of the phone
+        ConnectivityManager cm =
+                (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        saveState = layoutManager.onSaveInstanceState();
+        outState.putParcelableArrayList("Movie List", mMovies);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            saveState = savedInstanceState.getParcelable("Movie List");
+        }
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (saveState != null) {
+            layoutManager.onRestoreInstanceState(saveState);
+        }
     }
 }

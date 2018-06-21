@@ -2,10 +2,10 @@ package com.example.brandonfadairo.popularmovies.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.brandonfadairo.popularmovies.R;
@@ -43,12 +43,15 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         Review currentReview = mReviews.get(position);
 
+        //Review currentReview = mReviews.get(position);
+
         TextView authorText = holder.authorReview;
 
         TextView contentText = holder.contentReview;
 
         //Set the Author TextView to the current Author
         authorText.setText(currentReview.getAuthor());
+        Log.v(LOG_TAG, "Author: " + currentReview.getAuthor());
 
         //Set the Content TextView to the current Review content
         contentText.setText(currentReview.getReview());
@@ -65,7 +68,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         public TextView authorReview;
         public TextView contentReview;
         public View layout;
-        public RelativeLayout relativeLayout;
 
         ViewHolder(View itemView, final Context context) {
             super(itemView);

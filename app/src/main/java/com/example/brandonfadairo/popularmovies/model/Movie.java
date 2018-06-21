@@ -1,44 +1,68 @@
 package com.example.brandonfadairo.popularmovies.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "favorites")
 public class Movie implements Parcelable {
 
     //int used to store the id of the movie
+    @NonNull
+    @PrimaryKey
     @SerializedName("id")
     private int mId;
 
     //String used to store the title of the movie
+    @ColumnInfo(name = "title")
     @SerializedName("title")
     private String mTitle;
 
     //String used to store the release date of the movie
+    @ColumnInfo(name = "release_date")
     @SerializedName("release_date")
     private String mDate;
 
     //String used to store the link of the movie poster
+    @ColumnInfo(name = "poster_path")
     @SerializedName("poster_path")
     private String mPoster;
 
     //String used to store the link of the backdrop path
+    @ColumnInfo(name = "backdrop_path")
     @SerializedName("backdrop_path")
     private String mBackdrop;
 
     //String used to store the vote average
+    @ColumnInfo(name = "voter_average")
     @SerializedName("vote_average")
     private String mAverage;
 
     //String used to store synopsis of the movie
+    @ColumnInfo(name = "overview")
     @SerializedName("overview")
     private String mSynopsis;
 
 
+    public Movie(@NonNull int mId, String mTitle, String mDate, String mPoster, String mBackdrop, String mAverage, String mSynopsis) {
+        this.mId = mId;
+        this.mTitle = mTitle;
+        this.mDate = mDate;
+        this.mPoster = mPoster;
+        this.mBackdrop = mBackdrop;
+        this.mAverage = mAverage;
+        this.mSynopsis = mSynopsis;
+    }
+
     /**
      * Constructor
      **/
+
 
     protected Movie(Parcel in) {
         this.mId = in.readInt();

@@ -1,7 +1,6 @@
 package com.example.brandonfadairo.popularmovies;
 
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;

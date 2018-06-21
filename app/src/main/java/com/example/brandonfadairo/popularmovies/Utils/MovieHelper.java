@@ -22,6 +22,8 @@ public class MovieHelper {
 
     private static final String REVIEW_TAG = "reviews";
 
+    private static final String FAVORITES = "favorites";
+
     private static final String POPULAR_SEARCH = "popular";
 
     private static final String TOP_RATED = "top_rated";
@@ -62,6 +64,9 @@ public class MovieHelper {
                 prefSort = TOP_RATED;
                 sortOrder = "Top Rated";
                 break;
+            case "2":
+                prefSort = FAVORITES;
+                sortOrder = "Favorites";
         }
 
         return prefSort;
@@ -166,7 +171,7 @@ public class MovieHelper {
          String link = request.buildUpon()
                  //Append the MovieId to the movie Uri
                  .appendPath(String.valueOf(movie.getId()))
-                 //Append the Trailer Tag to the Uri
+                 //Append the Videos Tag to the Uri
                  .appendPath(TRAILER_TAG)
                  //Finally append the API TAG and API Key
                  .appendQueryParameter(API_TAG, API_KEY)

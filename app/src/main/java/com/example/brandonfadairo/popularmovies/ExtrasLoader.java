@@ -4,11 +4,14 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 
 import com.example.brandonfadairo.popularmovies.Utils.NetworkUtils;
-import com.example.brandonfadairo.popularmovies.model.Review;
+import com.example.brandonfadairo.popularmovies.model.Extras;
 
 import java.util.List;
 
-public class ExtrasLoader extends AsyncTaskLoader<List<Review>> {
+import static com.example.brandonfadairo.popularmovies.DetailActivity.floatingActionButton;
+import static com.example.brandonfadairo.popularmovies.DetailActivity.isFavorite;
+
+public class ExtrasLoader extends AsyncTaskLoader<List<Extras>> {
     /**
      * Tag for log messages
      */
@@ -35,19 +38,25 @@ public class ExtrasLoader extends AsyncTaskLoader<List<Review>> {
     @Override
     protected void onStartLoading() {
         forceLoad();
+        if (isFavorite) {
+            floatingActionButton.setImageDrawable(getContext().getResources().getDrawable(R.drawable.icons8_star_filled));
+        } else {
+            floatingActionButton.setImageDrawable(getContext().getResources().getDrawable(R.drawable.icons8_star));
+        }
     }
 
     /**
      * This is on the background thread
      */
     @Override
-    public List<Review> loadInBackground() {
+    public List<Extras> loadInBackground() {
         if (mUrl == null) {
             return null;
         }
-        //Perform the network request, parses the response, and extract a list of reviews.
-        List<Review> reviews = NetworkUtils.fetchReviewJsonData(mUrl);
 
-        return reviews;
+        //Perform the network request, parses the response, and extract a list of reviews.
+        List<Extras> extras = NetworkUtils.fetchExtrasJsonData(mUrl);
+
+        return extras;
     }
 }
