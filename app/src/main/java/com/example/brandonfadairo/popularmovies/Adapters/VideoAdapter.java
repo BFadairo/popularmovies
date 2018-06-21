@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.brandonfadairo.popularmovies.BuildConfig;
 import com.example.brandonfadairo.popularmovies.R;
 import com.example.brandonfadairo.popularmovies.model.Videos;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -25,7 +26,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
 
     public static Map<YouTubeThumbnailView, YouTubeThumbnailLoader> youtubeMap = new HashMap<>();
     private final Context mContext;
-    private final String API_KEY = "AIzaSyCVcSjx1ze-90t5FE4eF_jE5HZHmK0ZsUU";
+    private final String API_KEY = BuildConfig.MY_YOUTUBE_API_KEY;
     public String LOG_TAG = this.getClass().getName();
     private ArrayList<Videos> mVideos;
 

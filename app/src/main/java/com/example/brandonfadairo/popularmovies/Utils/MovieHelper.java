@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.brandonfadairo.popularmovies.BuildConfig;
 import com.example.brandonfadairo.popularmovies.R;
 import com.example.brandonfadairo.popularmovies.model.Movie;
 
@@ -30,7 +31,7 @@ public class MovieHelper {
 
     private static final String API_TAG = "api_key";
 
-    private static final String API_KEY = "67df4653be6cce83a6265a3c94b33b72"; // Insert MovieDB API key here
+    private static final String API_KEY = BuildConfig.MY_MOVIE_DB_API_KEY; // Insert MovieDB API key here
 
     private static String sortOrder = "Most Popular";
 
