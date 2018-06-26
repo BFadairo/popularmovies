@@ -1,7 +1,6 @@
 package com.example.brandonfadairo.popularmovies;
 
 import android.app.LoaderManager;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
@@ -32,28 +31,20 @@ import java.util.List;
 public class MovieActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<List<Movie>>,
         SharedPreferences.OnSharedPreferenceChangeListener,
-        MovieAdapter.AdapterOnClick{
+        MovieAdapter.AdapterOnClick {
 
-    private static String LOG_TAG = MovieActivity.class.getName();
+    // --Commented out by Inspection (6/25/2018 7:38 PM):private static String LOG_TAG = MovieActivity.class.getName();
+
+    private static final String MOVIE_PARCEL = "Movie List";
 
     private static final int MOVIE_LOADER_ID = 1;
-
-    private MovieAdapter movieAdapter;
-
-    private TextView emptyView;
-
-    private ProgressBar loadingView;
-
-    private RecyclerView recyclerView;
-
-    private RecyclerView.LayoutManager layoutManager;
-
-    private ArrayList<Movie> mMovies;
-
     public static MovieDatabase database;
-
-    private final String DATABASE_NAME = "MovieDatabase.db";
-
+    private MovieAdapter movieAdapter;
+    private TextView emptyView;
+    private ProgressBar loadingView;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<Movie> mMovies;
     private boolean isConnected;
 
     private Parcelable saveState;
@@ -63,15 +54,15 @@ public class MovieActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
-        if (savedInstanceState != null) {
-            mMovies = savedInstanceState.getParcelableArrayList("Movie List");
-        }
-
         //Find the RecyclerView list ID
         recyclerView = findViewById(R.id.recycler_view_main);
 
         //Create the database on Launch
-        database = Room.databaseBuilder(getApplicationContext(), MovieDatabase.class, DATABASE_NAME).build();
+        database = MovieDatabase.getAppDatabase(this);
+
+        if (savedInstanceState != null) {
+            mMovies = savedInstanceState.getParcelableArrayList(MOVIE_PARCEL);
+        }
 
         //Create a GridLayoutManager
         int numberOfColumns = 2;
@@ -85,8 +76,8 @@ public class MovieActivity extends AppCompatActivity
         //Find the ProgressBar view ID
         loadingView = findViewById(R.id.bar_view);
 
-
         mMovies = new ArrayList<>();
+
         // Create a new adapter that takes an empty list of movies as input
         movieAdapter = new MovieAdapter(this, mMovies, this);
 
@@ -100,6 +91,7 @@ public class MovieActivity extends AppCompatActivity
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
             loaderManager.initLoader(MOVIE_LOADER_ID, null, this);
+
         } else {
             //Set the empty view to No Connection when no internet connection is found
             emptyView.setText(R.string.no_connection);
@@ -127,9 +119,6 @@ public class MovieActivity extends AppCompatActivity
 
     @Override
     public Loader<List<Movie>> onCreateLoader(int i, Bundle bundle) {
-        if (saveState != null) {
-
-        }
         return new MovieLoader(this, MovieHelper.buildQueryUrl(this));
     }
 
@@ -145,9 +134,9 @@ public class MovieActivity extends AppCompatActivity
         // If there is a valid list of {@link Movies}, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (movies != null && !movies.isEmpty()) {
-          mMovies.addAll(movies);
-          //Set the EmptyView Visibility to Gone once Loaded and data is not null
-          emptyView.setVisibility(View.GONE);
+            mMovies.addAll(movies);
+            //Set the EmptyView Visibility to Gone once Loaded and data is not null
+            emptyView.setVisibility(View.GONE);
         }
         movieAdapter.notifyDataSetChanged();
     }
@@ -217,12 +206,13 @@ public class MovieActivity extends AppCompatActivity
         //Unregister the OnSharedPreferenceChangeListener
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
+        MovieDatabase.destroyInstance();
     }
 
     //The On Click Listener for the Recycler View
     //When a MoviePoster is selected
     //Open the DetailActivity
-    //And put that Movie object into an Intent
+    //And pass the Movie object in the Intent
     @Override
     public void onClick(Movie movie) {
         Intent detailActivity = new Intent(this, DetailActivity.class);
@@ -230,8 +220,8 @@ public class MovieActivity extends AppCompatActivity
         startActivity(detailActivity);
     }
 
-    public void checkNetworkStatus() {
-        //Check the internet connection of the phone
+    private void checkNetworkStatus() {
+        //Check the current internet connection of the phone
         ConnectivityManager cm =
                 (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -243,15 +233,15 @@ public class MovieActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         saveState = layoutManager.onSaveInstanceState();
-        outState.putParcelableArrayList("Movie List", mMovies);
+        outState.putParcelableArrayList(MOVIE_PARCEL, mMovies);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            saveState = savedInstanceState.getParcelable("Movie List");
-        }
         super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            saveState = savedInstanceState.getParcelable(MOVIE_PARCEL);
+        }
     }
 
     @Override
@@ -261,4 +251,5 @@ public class MovieActivity extends AppCompatActivity
             layoutManager.onRestoreInstanceState(saveState);
         }
     }
+
 }

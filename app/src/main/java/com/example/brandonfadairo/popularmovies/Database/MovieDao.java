@@ -15,9 +15,6 @@ public interface MovieDao {
     @Insert
     void insertOnlySingleMovie(Movie movies);
 
-    @Insert
-    void insertMultipleMovies(List<Movie> moviesList);
-
     @Query("SELECT * FROM favorites")
     List<Movie> getAllFavorites();
 

@@ -123,17 +123,16 @@ public class MovieHelper {
         //Create a new Uri called request and parse the BASE_IMAGE_URL
         Uri request = Uri.parse(BASE_IMAGE_URL);
         //Create a string variable to store the Uri
-        String imageLink = request.buildUpon()
+
+        //Log.v(LOG_TAG, "Image Path: " + link);
+
+        return request.buildUpon()
                 //Append the Size of the image
                 .appendPath(imageSizeSet(context))
                 //Append the image path
                 .appendEncodedPath(imagePath)
                 .build()
                 .toString();
-
-        //Log.v(LOG_TAG, "Image Path: " + link);
-
-        return imageLink;
     }
 
     /**
@@ -146,7 +145,10 @@ public class MovieHelper {
         //Create a new Uri called request and parse the BASE_IMAGE_URL
         Uri request = Uri.parse(BASE_REQUEST_URL);
         //Create a string variable called link to store the built Uri
-        String link = request.buildUpon()
+
+        //Log.d(LOG_TAG, "Link: " + link);
+
+        return request.buildUpon()
                 //Build upon the Uri and append the query
                 //With the isPopular Helper Method
                 .appendPath(MovieHelper.isPopular(context))
@@ -154,55 +156,7 @@ public class MovieHelper {
                 .appendQueryParameter(API_TAG, API_KEY)
                 .build()
                 .toString();
-
-        //Log.d(LOG_TAG, "Link: " + link);
-
-        return link;
     }
-
-    /**
-     * Method used to search for related trailers for movie
-     * @param movie We want to find the trailers for
-     * @return link the completed request link
-     */
-     public static String buildTrailerRequest(Movie movie){
-        //Create a new Uri from the BASE_REQUEST_URL
-         Uri request = Uri.parse(BASE_REQUEST_URL);
-         //Create a string variable called link to store the built Uri
-         String link = request.buildUpon()
-                 //Append the MovieId to the movie Uri
-                 .appendPath(String.valueOf(movie.getId()))
-                 //Append the Videos Tag to the Uri
-                 .appendPath(TRAILER_TAG)
-                 //Finally append the API TAG and API Key
-                 .appendQueryParameter(API_TAG, API_KEY)
-                 .build()
-                 .toString();
-
-         return link;
-     }
-
-    /**
-     * Method used to create link we will use to search for movie reviews
-     * @param movie the movie that we are searching reviews for
-     * @return link The completed request link
-     */
-     public static String buildReviewRequest(Movie movie){
-         //Create a new Uri from the BASE_REQUEST_URL
-         Uri request = Uri.parse(BASE_REQUEST_URL);
-         //Create a string variable called link to store the built Uri
-         String link = request.buildUpon()
-                 //Append the MovieId to the movie Uri
-                 .appendPath(String.valueOf(movie.getId()))
-                 //Append the Review Tag to the Uri
-                 .appendPath(REVIEW_TAG)
-                 //Finally append the API TAG and API Key
-                 .appendQueryParameter(API_TAG, API_KEY)
-                 .build()
-                 .toString();
-
-         return link;
-     }
 
     /**
      * Method used to request the trailers and reviews for a certain movie

@@ -8,21 +8,18 @@ import com.example.brandonfadairo.popularmovies.model.Extras;
 
 import java.util.List;
 
-import static com.example.brandonfadairo.popularmovies.DetailActivity.floatingActionButton;
-import static com.example.brandonfadairo.popularmovies.DetailActivity.isFavorite;
-
-public class ExtrasLoader extends AsyncTaskLoader<List<Extras>> {
+class ExtrasLoader extends AsyncTaskLoader<List<Extras>> {
     /**
      * Tag for log messages
      */
 
     private static final String LOG_TAG = MovieLoader.class.getName();
 
-
     /**
      * Query URL
      */
-    private String mUrl;
+    private final String mUrl;
+
 
     /**
      * Constructs a new (@Link ExtrasLoader).
@@ -38,11 +35,6 @@ public class ExtrasLoader extends AsyncTaskLoader<List<Extras>> {
     @Override
     protected void onStartLoading() {
         forceLoad();
-        if (isFavorite) {
-            floatingActionButton.setImageDrawable(getContext().getResources().getDrawable(R.drawable.icons8_star_filled));
-        } else {
-            floatingActionButton.setImageDrawable(getContext().getResources().getDrawable(R.drawable.icons8_star));
-        }
     }
 
     /**
@@ -53,10 +45,8 @@ public class ExtrasLoader extends AsyncTaskLoader<List<Extras>> {
         if (mUrl == null) {
             return null;
         }
-
         //Perform the network request, parses the response, and extract a list of reviews.
-        List<Extras> extras = NetworkUtils.fetchExtrasJsonData(mUrl);
 
-        return extras;
+        return NetworkUtils.fetchExtrasJsonData(mUrl);
     }
 }

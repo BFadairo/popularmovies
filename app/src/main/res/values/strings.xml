@@ -22,6 +22,14 @@
     <string name="pref_sort_key">Movie Sort</string>
     <string name="pref_sort_title">Sort Type</string>
 
+    <!-- Strings for Content Descriptions -->
+    <string name="detail_content_description">Favorites Icon</string>
+    <string name="video_list_content_description">Youtube Play Button</string>
+
+    <!-- Strings related to TextViews -->
+    <string name="trailer_tag">Trailers: </string>
+    <string name="review_tag">Reviews: </string>
+
     <!-- Strings related to default settings -->
     <string name="pref_sort_popular">Most Popular</string>
     <string name="pref_sort_top_rated">Top Rated</string>

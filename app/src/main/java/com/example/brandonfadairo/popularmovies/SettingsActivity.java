@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    final static String LOG_TAG = SettingsActivity.class.getName();
+    // --Commented out by Inspection (6/25/2018 7:39 PM):final static String LOG_TAG = SettingsActivity.class.getName();
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {

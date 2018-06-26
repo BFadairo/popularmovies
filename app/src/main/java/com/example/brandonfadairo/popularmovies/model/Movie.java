@@ -16,37 +16,37 @@ public class Movie implements Parcelable {
     @NonNull
     @PrimaryKey
     @SerializedName("id")
-    private int mId;
+    private final int mId;
 
     //String used to store the title of the movie
     @ColumnInfo(name = "title")
     @SerializedName("title")
-    private String mTitle;
+    private final String mTitle;
 
     //String used to store the release date of the movie
     @ColumnInfo(name = "release_date")
     @SerializedName("release_date")
-    private String mDate;
+    private final String mDate;
 
     //String used to store the link of the movie poster
     @ColumnInfo(name = "poster_path")
     @SerializedName("poster_path")
-    private String mPoster;
+    private final String mPoster;
 
     //String used to store the link of the backdrop path
     @ColumnInfo(name = "backdrop_path")
     @SerializedName("backdrop_path")
-    private String mBackdrop;
+    private final String mBackdrop;
 
     //String used to store the vote average
     @ColumnInfo(name = "voter_average")
     @SerializedName("vote_average")
-    private String mAverage;
+    private final String mAverage;
 
     //String used to store synopsis of the movie
     @ColumnInfo(name = "overview")
     @SerializedName("overview")
-    private String mSynopsis;
+    private final String mSynopsis;
 
 
     public Movie(@NonNull int mId, String mTitle, String mDate, String mPoster, String mBackdrop, String mAverage, String mSynopsis) {

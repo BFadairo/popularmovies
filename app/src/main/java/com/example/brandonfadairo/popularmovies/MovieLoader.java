@@ -15,19 +15,13 @@ import static com.example.brandonfadairo.popularmovies.MovieActivity.database;
  * Created by Brandon on 1/13/2018.
  */
 
-public class MovieLoader extends AsyncTaskLoader<List<Movie>> {
-    /**
-     * Tag for log messages
-     */
-    private static final String LOG_TAG = MovieLoader.class.getName();
-
-    private static List<Movie> movies;
+class MovieLoader extends AsyncTaskLoader<List<Movie>> {
 
 
     /**
      * Query URL
      */
-    private String mUrl;
+    private final String mUrl;
 
     /**
      * Constructs a new (@Link MovieLoader).
@@ -57,7 +51,7 @@ public class MovieLoader extends AsyncTaskLoader<List<Movie>> {
         Context context = getContext();
         String topRated = context.getString(R.string.pref_sort_top_rated);
         String mostPopular = context.getString(R.string.pref_sort_popular);
-        String favorites = context.getString(R.string.pref_sort_favorites);
+        List<Movie> movies;
         if (MovieHelper.getSortOrder().equals(topRated) || MovieHelper.getSortOrder().equals(mostPopular)) {
             //Perform the network request, parses the response, and extract a list of movies.
             movies = NetworkUtils.fetchMovieJsonData(mUrl);

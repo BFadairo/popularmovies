@@ -7,10 +7,10 @@ import java.util.List;
 public class Extras {
 
     @Expose
-    public List<Review> reviews;
+    private List<Review> reviews;
 
     @Expose
-    public List<Videos> videos;
+    private List<Videos> videos;
 
     public Extras() {
 

@@ -12,14 +12,12 @@ public abstract class MovieDatabase extends RoomDatabase {
 
     private static MovieDatabase INSTANCE;
 
+    private final static String DATABASE_NAME = "MovieDatabase.db";
+
     public static MovieDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), MovieDatabase.class, "movie-database")
-                            // allow queries on the main thread.
-                            // Don't do this on a real app! See PersistenceBasicSample for an example.
-                            //TODO Change to Not Allow MainThreadQueries
-                            //.allowMainThreadQueries()
+                    Room.databaseBuilder(context.getApplicationContext(), MovieDatabase.class, DATABASE_NAME)
                             .build();
         }
         return INSTANCE;

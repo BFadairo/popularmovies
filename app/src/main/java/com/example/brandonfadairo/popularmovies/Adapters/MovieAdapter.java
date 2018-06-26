@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.example.brandonfadairo.popularmovies.R;
 import com.example.brandonfadairo.popularmovies.Utils.MovieHelper;
@@ -17,9 +16,9 @@ import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
-    public String LOG_TAG = MovieAdapter.class.getName();
+    // --Commented out by Inspection (6/25/2018 7:39 PM):public String LOG_TAG = MovieAdapter.class.getName();
 
-    private ArrayList<Movie> mMovies;
+    private final ArrayList<Movie> mMovies;
     private final Context mContext;
     private final AdapterOnClick clickHandler;
 
@@ -44,9 +43,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         View movieView =
                 inflater.inflate(R.layout.movie_list, parent, false);
         // set the view's size, margins, padding and layout parameters
-        ViewHolder vh = new ViewHolder(movieView, context);
 
-        return vh;
+        return new ViewHolder(movieView);
     }
 
     @Override
@@ -69,11 +67,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ImageView movieImage;
-        public View layout;
-        public RelativeLayout relativeLayout;
+        final ImageView movieImage;
+        final View layout;
 
-        ViewHolder(View itemView, final Context context) {
+        ViewHolder(View itemView) {
             super(itemView);
             layout = itemView;
             movieImage = itemView.findViewById(R.id.movie_poster);

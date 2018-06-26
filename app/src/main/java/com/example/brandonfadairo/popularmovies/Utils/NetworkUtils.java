@@ -28,11 +28,7 @@ public class NetworkUtils {
     /**
      * Tag for Log messages
      */
-    private static String LOG_TAG = NetworkUtils.class.getName();
-
-    private static List<Review> reviewStuff;
-
-    private static List<Videos> videosStuff;
+    private static final String LOG_TAG = NetworkUtils.class.getName();
 
     /**
      * Query the MovieDB dataset and return as (@link Movie) object to represent multiple movies.
@@ -53,10 +49,9 @@ public class NetworkUtils {
             e.printStackTrace();
         }
         //Extract the relevant fields from the JSON with helper method parseJson
-        List<Movie> movies = parseMovieJson(jsonResponse);
 
         //return the jsonResponse
-        return movies;
+        return parseMovieJson(jsonResponse);
     }
 
     /**
@@ -78,10 +73,9 @@ public class NetworkUtils {
             e.printStackTrace();
         }
         //Extract the relevant fields from the JSON with helper method parseJson
-        List<Extras> extras = parseExtrasJson(jsonResponse);
 
         //return the jsonResponse
-        return extras;
+        return parseExtrasJson(jsonResponse);
     }
 
     private static URL createUrl(String requestURL) {
@@ -150,7 +144,7 @@ public class NetworkUtils {
 
     }
 
-    public static List<Movie> parseMovieJson(String json) {
+    private static List<Movie> parseMovieJson(String json) {
 
         if (TextUtils.isEmpty(json)) {
             return null;
@@ -189,7 +183,7 @@ public class NetworkUtils {
         return movieStuff;
     }
 
-    public static List<Extras> parseExtrasJson(String json) {
+    private static List<Extras> parseExtrasJson(String json) {
 
         if (TextUtils.isEmpty(json)){
             return null;
@@ -198,11 +192,11 @@ public class NetworkUtils {
         Gson gson = new Gson();
 
         List<Extras> movieExtras = new ArrayList<>();
-        reviewStuff = new ArrayList<>();
-        videosStuff = new ArrayList<>();
-        Review reviews = new Review();
-        Videos videos = new Videos();
-        Extras extras = new Extras();
+        List<Review> reviewStuff = new ArrayList<>();
+        List<Videos> videosStuff = new ArrayList<>();
+        Review reviews;
+        Videos videos;
+        Extras extras;
         // Try to parse the JSON response string. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.
         // Catch the exception so the app doesn't crash, and print the error message to the logs.

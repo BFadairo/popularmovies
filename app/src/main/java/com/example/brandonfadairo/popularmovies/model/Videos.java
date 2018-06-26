@@ -8,50 +8,12 @@ public class Videos {
     @SerializedName("key")
     private String trailerKey;
 
-    /* String used to store the size of the trailer */
-    @SerializedName("size")
-    private String trailerSize;
-
-    /* String used to store the site of the trailer */
-    @SerializedName("site")
-    private String trailerSite;
-
-    /* String used to store the id of the trailer */
-    @SerializedName("id")
-    private String trailerId;
-
     public Videos() {
 
     }
 
-    public Videos(String trailerKey, String trailerSize, String trailerSite, String trailerId) {
+    public Videos(String trailerKey) {
         this.trailerKey = trailerKey;
-        this.trailerSize = trailerSize;
-        this.trailerSite = trailerSite;
-        this.trailerId = trailerId;
-    }
-
-//TODO GETTER METHODS
-
-    /**
-     * Used to retrieve the trailer size
-     */
-    public String getTrailerSize() {
-        return trailerSize;
-    }
-
-    /**
-     * Used to retrieve the trailer Site
-     */
-    public String getTrailerSite() {
-        return trailerSite;
-    }
-
-    /**
-     * Used to retrieve the trailer Id
-     */
-    public String getTrailerId() {
-        return trailerId;
     }
 
     /**

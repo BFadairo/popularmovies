@@ -36,27 +36,24 @@ public class DetailActivity extends AppCompatActivity implements
 
     private static final String LOG_TAG = DetailActivity.class.getName();
 
-    private ImageView moviePoster;
-
-    private ImageView movieBackdrop;
-    public static FloatingActionButton floatingActionButton;
-
-    private String title, backdrop, releaseDate, plotOverview, poster, average;
-    public static boolean isFavorite;
-
-    private RecyclerView.LayoutManager layoutManager;
-
-    private ReviewAdapter reviewAdapter;
     private static Movie movie;
 
-    private ArrayList<Review> mReviews;
-    private TextView movieTitle, movieDate, movieAverage, movieSynopsis, trailerTag, reviewTag;
-    private RecyclerView recyclerDetailReview, recyclerDetailVideo;
+    private static boolean isFavorite;
+    private TextView trailerTag;
 
-    private int DETAIL_LOADER_ID = 2;
+    private RecyclerView recyclerDetailReview, recyclerDetailVideo;
+    private TextView reviewTag;
+    private RecyclerView.LayoutManager layoutManager;
+    private String releaseDate;
+    private ReviewAdapter reviewAdapter;
     private VideoAdapter videoAdapter;
+
+    private FloatingActionButton floatingActionButton;
+
+    private ArrayList<Review> mReviews;
     private ArrayList<Videos> mVideos;
     private ArrayList<Extras> mExtras;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,25 +62,32 @@ public class DetailActivity extends AppCompatActivity implements
 
 
         //Find the views associated with the detail activity
-        movieBackdrop = findViewById(R.id.movie_poster_bin);
-        movieTitle = findViewById(R.id.movie_title_bin);
-        movieDate = findViewById(R.id.movie_release_bin);
-        movieAverage = findViewById(R.id.movie_average_bin);
-        movieSynopsis = findViewById(R.id.movie_synopsis_bin);
-        moviePoster = findViewById(R.id.movie_poster_mini);
+        ImageView movieBackdrop = findViewById(R.id.movie_poster_bin);
+        TextView movieTitle = findViewById(R.id.movie_title_bin);
+        TextView movieDate = findViewById(R.id.movie_release_bin);
+        TextView movieAverage = findViewById(R.id.movie_average_bin);
+        TextView movieSynopsis = findViewById(R.id.movie_synopsis_bin);
+        ImageView moviePoster = findViewById(R.id.movie_poster_mini);
         trailerTag = findViewById(R.id.trailer_tag);
         reviewTag = findViewById(R.id.review_tag);
         floatingActionButton = findViewById(R.id.favorites_button_fab);
+
         trailerTag.setVisibility(View.GONE);
         reviewTag.setVisibility(View.GONE);
 
         //Get the intent that started the activity and put it into a Movie object
         movie = getIntent().getParcelableExtra(getString(R.string.movie_extra));
 
-        //TODO: CHECK IF THE MOVIE IS A FAVORITE ON OPEN ASYNC RELATED STUFF
-        new favoriteChecker().execute();
+        changeFabDrawable();
 
-        //TODO Recycler view things
+        new favoriteChecker() {
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                changeFabDrawable();
+            }
+        }.execute();
+
         mReviews = new ArrayList<>();
         mExtras = new ArrayList<>();
         mVideos = new ArrayList<>();
@@ -99,12 +103,12 @@ public class DetailActivity extends AppCompatActivity implements
         recyclerDetailVideo.setAdapter(videoAdapter);
 
         //Retrieve the extras that were put into the Intent
-        title = movie.getTitle();
-        poster = movie.getPoster();
-        backdrop = movie.getBackdrop();
+        String title = movie.getTitle();
+        String poster = movie.getPoster();
+        String backdrop = movie.getBackdrop();
         releaseDate = movie.getDate();
-        plotOverview = movie.getSynopsis();
-        average = movie.getAverage();
+        String plotOverview = movie.getSynopsis();
+        String average = movie.getAverage();
 
 
         //Log.v(LOG_TAG, "Backdrop Path: " + MovieHelper.buildImage(backdrop, this));
@@ -130,10 +134,12 @@ public class DetailActivity extends AppCompatActivity implements
                     floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.icons8_star));
                     Toast toast = Toast.makeText(getApplicationContext(), "Favorite Deleted", Toast.LENGTH_LONG);
                     toast.show();
+                    isFavorite = false;
                 } else {
                     floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.icons8_star_filled));
                     Toast toast = Toast.makeText(getApplicationContext(), "Favorite Added", Toast.LENGTH_LONG);
                     toast.show();
+                    isFavorite = true;
                 }
             }
         });
@@ -188,13 +194,14 @@ public class DetailActivity extends AppCompatActivity implements
                 videos = extras.get(i).getVideos();
                 mVideos.addAll(videos);
             }
-            if (mReviews.size() >= 1) {
-                reviewTag.setVisibility(View.VISIBLE);
-            }
+        }
 
-            if (mVideos.size() >= 1) {
-                trailerTag.setVisibility(View.VISIBLE);
-            }
+        if (mReviews.size() >= 1) {
+            reviewTag.setVisibility(View.VISIBLE);
+        }
+
+        if (mVideos.size() >= 1) {
+            trailerTag.setVisibility(View.VISIBLE);
         }
     }
 
@@ -229,6 +236,7 @@ public class DetailActivity extends AppCompatActivity implements
         // Initialize the loader. Pass in the int ID constant defined above and pass in null for
         // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
         // because this activity implements the LoaderCallbacks interface).
+        int DETAIL_LOADER_ID = 2;
         loaderManager.initLoader(DETAIL_LOADER_ID, null, this);
     }
 
@@ -264,12 +272,15 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
-    private static class favoriteChecker extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-
+    private void changeFabDrawable() {
+        if (isFavorite) {
+            floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.icons8_star_filled));
+        } else {
+            floatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.icons8_star));
         }
+    }
+
+    private static class favoriteChecker extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
@@ -277,5 +288,6 @@ public class DetailActivity extends AppCompatActivity implements
             Log.v(LOG_TAG, "Favorite: " + isFavorite);
             return isFavorite;
         }
+
     }
 }

@@ -70,6 +70,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:contentDescription="@string/detail_content_description"
                             android:src="@drawable/star32" />
 
                         <TextView
@@ -104,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="Trailers:"
+                android:text="@string/trailer_tag"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
@@ -121,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="Reviews:"
+                android:text="@string/review_tag"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
@@ -141,9 +142,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/icons8_star" />
+
 
 </RelativeLayout>

@@ -12,9 +12,7 @@ import android.util.Log;
 public class SettingsFragment extends PreferenceFragmentCompat
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    public static String LOG_TAG = SettingsFragment.class.getName();
-
-    private ListPreference sortPref, sizePref;
+    private static final String LOG_TAG = SettingsFragment.class.getName();
 
     @Override
     public void onStart() {
@@ -31,16 +29,15 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
         //Find both list preferences
         //and Set their summaries to their current values
-        sortPref = (ListPreference) findPreference(getString(R.string.pref_sort_key));
+        ListPreference sortPref = (ListPreference) findPreference(getString(R.string.pref_sort_key));
         sortPref.setSummary(sortPref.getEntry());
-        sizePref = (ListPreference) findPreference(getString(R.string.pref_size_key));
+        ListPreference sizePref = (ListPreference) findPreference(getString(R.string.pref_size_key));
         sizePref.setSummary(sizePref.getEntry());
 
     }
 
     private void setPreferenceSummary(Preference preference, Object value) {
         String stringValue = value.toString();
-        String key = preference.getKey();
 
         if (preference instanceof ListPreference) {
             /* For list preferences, look up the correct display value in */

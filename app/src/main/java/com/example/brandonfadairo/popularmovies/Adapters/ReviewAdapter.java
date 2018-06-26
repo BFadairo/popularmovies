@@ -15,13 +15,12 @@ import java.util.ArrayList;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
 
-    private final Context mContext;
-    public String LOG_TAG = this.getClass().getName();
-    private ArrayList<Review> mReviews;
+    private final String LOG_TAG = this.getClass().getName();
+    private final ArrayList<Review> mReviews;
 
     public ReviewAdapter(Context context, ArrayList<Review> reviews) {
         mReviews = reviews;
-        mContext = context;
+        Context mContext = context;
     }
 
     @Override
@@ -33,9 +32,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         View reviewView =
                 inflater.inflate(R.layout.review_list, parent, false);
         // set the view's size, margins, padding and layout parameters
-        ViewHolder vh = new ViewHolder(reviewView, context);
 
-        return vh;
+        return new ViewHolder(reviewView, context);
     }
 
     @Override
@@ -65,9 +63,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView authorReview;
-        public TextView contentReview;
-        public View layout;
+        final TextView authorReview;
+        final TextView contentReview;
+        final View layout;
 
         ViewHolder(View itemView, final Context context) {
             super(itemView);

@@ -5,10 +5,14 @@
     <dimen name="detail_image_height">250dp</dimen>
     <dimen name="detail_mini_poster_height">150dp</dimen>
     <dimen name="detail_mini_poster_width">100dp</dimen>
+    <dimen name="base_padding">16dp</dimen>
+    <dimen name="review_left_margin">10dp</dimen>
+    <dimen name="card_corner_radius">4dp</dimen>
 
     <!-- Dimensions for Text Sizes -->
     <dimen name="detail_text_size_small">15sp</dimen>
     <dimen name="detail_text_size_big">30sp</dimen>
     <dimen name="detail_layout_margin_small">10dp</dimen>
     <dimen name="detail_layout_margin_med">16dp</dimen>
+
 </resources>

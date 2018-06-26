@@ -24,11 +24,11 @@ import java.util.Map;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> {
 
-    public static Map<YouTubeThumbnailView, YouTubeThumbnailLoader> youtubeMap = new HashMap<>();
+    public static final Map<YouTubeThumbnailView, YouTubeThumbnailLoader> youtubeMap = new HashMap<>();
     private final Context mContext;
     private final String API_KEY = BuildConfig.MY_YOUTUBE_API_KEY;
-    public String LOG_TAG = this.getClass().getName();
-    private ArrayList<Videos> mVideos;
+    private final String LOG_TAG = this.getClass().getName();
+    private final ArrayList<Videos> mVideos;
 
     public VideoAdapter(Context context, ArrayList<Videos> videos) {
         mVideos = videos;
@@ -44,9 +44,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         View reviewView =
                 inflater.inflate(R.layout.video_list, parent, false);
         // set the view's size, margins, padding and layout parameters
-        VideoAdapter.ViewHolder vh = new VideoAdapter.ViewHolder(reviewView, context);
 
-        return vh;
+        return new ViewHolder(reviewView);
     }
 
     @Override
@@ -92,11 +91,11 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public YouTubeThumbnailView youTubeThumbnailView;
-        public View layout;
-        public ImageView playButton;
+        final YouTubeThumbnailView youTubeThumbnailView;
+        final View layout;
+        final ImageView playButton;
 
-        ViewHolder(View itemView, final Context context) {
+        ViewHolder(View itemView) {
             super(itemView);
             layout = itemView;
             youTubeThumbnailView = itemView.findViewById(R.id.youtube_view);
